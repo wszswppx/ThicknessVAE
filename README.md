@@ -13,7 +13,7 @@ Sandwich-like structure has demonstrated excellent performance in reconstructing
 You can follow this command to create a conda virtual environment:
 
 ```bash
-  conda env create -f env.yml
+conda env create -f env.yml
 ```
 
 Other packages can be installed by:
