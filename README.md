@@ -1,11 +1,8 @@
 # ThicknessVAE
 
-This project is for paper **ThicknessVAE: Learning a Side Prior for Clothed Human Body Reconstruction**.
+This project is for paper [ThicknessVAE: Learning a Side Prior for Clothed Human Body Reconstruction](https://openreview.net/pdf?id=FyZGjyeghg).
 
-<div align="center">
-  <img src="images/ThicknessVAE_overview.png" alt="Overview of ThicknessVAE">
-  <t>Overview of ThicknessVAE</t>
-</div>
+![Overview of ThicknessVAE](images/ThicknessVAE_overview.png "Overview of ThicknessVAE")
 
 ## Abstract
 
@@ -29,7 +26,8 @@ This code has been tested on Linux Ubuntu 18.08, cuda 10.2 (also works on cuda 1
 
 ## Dataset
 
-You are supposed to have THuman 2.0 dataset for both training and testing. 
+You are supposed to have THuman 2.0 dataset for both training and testing.
+
 To train ThicknessVAE, the dataset files should be placed with the following structure:
 
 ```
@@ -107,7 +105,7 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 -
 
 Training process for stage (b) will cost about 24 hours.
 
-**After getting a ThicknessVAE checkpoint, you can assert this module into ECON.**
+After getting a ThicknessVAE checkpoint, you can assert this module into ECON.
 
 ## Citation
 
