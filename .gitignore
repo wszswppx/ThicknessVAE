@@ -1,0 +1,11 @@
+.vscode
+__pycache__
+log
+.idea
+data/pcn
+log/thickness_1111
+log/thuman
+log/thuman_pcn
+results
+model_extract.py
+thickness_preprocess.ipynb
