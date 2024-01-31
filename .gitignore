@@ -9,3 +9,4 @@ log/thuman_pcn
 results
 model_extract.py
 thickness_preprocess.ipynb
+mesh2point.py
