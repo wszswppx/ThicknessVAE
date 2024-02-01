@@ -1,8 +1,11 @@
 # ThicknessVAE
 
-This project is for paper [ThicknessVAE: Learning a Side Prior for Clothed Human Body Reconstruction](https://openreview.net/pdf?id=FyZGjyeghg).
+This project is for paper **ThicknessVAE: Learning a Side Prior for Clothed Human Body Reconstruction**.
 
-![Overview of ThicknessVAE](images/ThicknessVAE_overview.png "Overview of ThicknessVAE")
+<div align="center">
+  <img src="images/ThicknessVAE_overview.png" alt="Overview of ThicknessVAE">
+  <t>Overview of ThicknessVAE</t>
+</div>
 
 ## Abstract
 
