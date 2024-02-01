@@ -1,3 +1,11 @@
+'''
+Description: Test code for ThicknessVAE Stage 1: VQ module
+Author: XiaotaoWu
+Date: 2023-08-31 16:09:10
+LastEditTime: 2024-02-01 14:12:24
+LastEditors: XiaotaoWu
+'''
+
 import os
 import argparse
 
@@ -13,17 +21,46 @@ from metrics.metric import l1_cd, l2_cd, emd, f_score
 
 
 def make_dir(dir_path):
+    """
+    Create a directory if it does not exist.
+
+    Args:
+        dir_path (str): The path of the directory to be created.
+    """
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
 
 def export_ply(filename, points):
+    """
+    Export a point cloud to a PLY file.
+
+    Args:
+        filename (str): The path to the output PLY file.
+        points (list): List of 3D points.
+
+    Returns:
+        None
+    """
     pc = o3d.geometry.PointCloud()
     pc.points = o3d.utility.Vector3dVector(points)
     o3d.io.write_point_cloud(filename, pc, write_ascii=True)
 
 
 def test_single_category(model, params, save=True):
+    """
+    Test the model on a single category.
+
+    Args:
+        model (torch.nn.Module): The model to be tested.
+        params (Namespace): The parameters for testing.
+        save (bool, optional): Whether to save the results. Defaults to True.
+
+    Returns:
+        float: The average L1 Chamfer distance.
+        float: The average L2 Chamfer distance.
+        float: The average F-score.
+    """
     if save:
         cat_dir = os.path.join(params.result_dir, params.exp_name)
         image_dir = os.path.join(cat_dir, 'image')
@@ -65,6 +102,13 @@ def test_single_category(model, params, save=True):
 
 
 def test(params, save=False):
+    """
+    Function to test the PCN model.
+
+    Args:
+        params (object): Parameters object containing various settings.
+        save (bool, optional): Flag indicating whether to save the results. Defaults to False.
+    """
     if save:
         make_dir(os.path.join(params.result_dir, params.exp_name))
 
@@ -86,6 +130,16 @@ def test(params, save=False):
 
 
 def test_single_category_emd(model, params):
+    """
+    Calculate the average Earth Mover's Distance (EMD) for a single category in the test dataset.
+
+    Args:
+        model (torch.nn.Module): The model used for inference.
+        params (Namespace): The parameters for the test.
+
+    Returns:
+        float: The average EMD for the single category.
+    """
     test_dataset = thuman('data/THuman2.0_Release', 'test_novel' if params.novel else 'test')
     test_dataloader = Data.DataLoader(test_dataset, batch_size=params.batch_size, shuffle=False)
 
@@ -101,6 +155,15 @@ def test_single_category_emd(model, params):
 
 
 def test_emd(params):
+    """
+    Test the Earth Mover's Distance (EMD) for a given model and parameters.
+
+    Args:
+        params (object): The parameters object containing the necessary information.
+
+    Returns:
+        None
+    """
     print(params.exp_name)
 
     # load pretrained model

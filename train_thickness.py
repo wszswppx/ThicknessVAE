@@ -1,3 +1,10 @@
+'''
+Description: ThicknessVAE Stage 2: train thickness network
+Author: XiaotaoWu
+Date: 2023-09-20 10:59:19
+LastEditTime: 2024-02-01 14:12:41
+LastEditors: XiaotaoWu
+'''
 import argparse
 import os
 import datetime
@@ -24,13 +31,25 @@ from visualization import view_depth
 import pdb
 
 def make_dir(dir_path):
+    """
+    Create a directory if it does not exist.
+
+    Args:
+        dir_path (str): The path of the directory to be created.
+    """
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    else:
-        pass
 
 
-def log(fd,  message, time=True):
+def log(fd,  message: str, time=True):
+    """
+    Write a log message to a file descriptor and print it to the console.
+
+    Parameters:
+    - fd: The file descriptor to write the log message to.
+    - message: The log message to write.
+    - time: Whether to include the current timestamp in the log message. Default is True.
+    """
     if time:
         message = ' ==> '.join([datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message])
     fd.write(message + '\n')
@@ -39,6 +58,16 @@ def log(fd,  message, time=True):
 
 
 def prepare_logger(params):
+    """
+    Prepare the logger for the experiment.
+
+    Args:
+        params (object): The parameters for the experiment.
+
+    Returns:
+        tuple: A tuple containing the checkpoint directory, epochs directory, log file descriptor,
+               train writer, and validation writer.
+    """
     # prepare logger directory
     make_dir(params.log_dir)
     make_dir(os.path.join(params.log_dir, params.exp_name))
@@ -65,6 +94,14 @@ def prepare_logger(params):
 
 
 def train(params, device, writer):
+    """
+    Train the thickness model.
+
+    Args:
+        params (object): Parameters for training.
+        device (torch.device): Device to perform training on.
+        writer (list): List of writer objects for logging.
+    """
     torch.backends.cudnn.benchmark = True
 
     #ckpt_dir, epochs_dir, log_fd, train_writer, val_writer = prepare_logger(params)
@@ -72,16 +109,15 @@ def train(params, device, writer):
 
     log(log_fd, 'Loading Data...')
 
+    # load dataset
     train_dataset = thickness_loader(params.train_set_path, 'train', )
     val_dataset = thickness_loader(params.train_set_path, 'valid', )
-
     train_dataloader = DataLoader(train_dataset, batch_size=params.batch_size, shuffle=False,sampler=DistributedSampler(train_dataset))
     val_dataloader = DataLoader(val_dataset, batch_size=params.batch_size, shuffle=False,sampler=DistributedSampler(val_dataset))
 
     log(log_fd, "Dataset loaded!")
 
-
-    pdb.set_trace()
+    # create model
     model = thickness_Autoencoder(in_dim=2).to(device)
     # load vq model
     checkpoint = torch.load(params.vq_path)
@@ -224,12 +260,13 @@ if __name__ == '__main__':
     parser.add_argument('--vq_path', type=str, default='./log/thuman_pu_1/checkpoints/best_l1_cd.pth', help='Path of pretrained vq model')
     params = parser.parse_args()
     
+    # prepare logger
     writer = prepare_logger(params)
     
+    # init distributed
     torch.distributed.init_process_group(backend="nccl")
     local_rank = torch.distributed.get_rank()
     torch.cuda.set_device(local_rank)
     device = torch.device("cuda", local_rank)
     
-    #pdb.set_trace()
     train(params, device, writer)

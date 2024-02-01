@@ -1,3 +1,10 @@
+'''
+Description: ThicknessVAE Stage 1: train the codebook
+Author: XiaotaoWu
+Date: 2023-09-19 21:48:59
+LastEditTime: 2024-02-01 14:01:24
+LastEditors: XiaotaoWu
+'''
 import argparse
 import os
 import datetime
@@ -19,11 +26,25 @@ from visualization import plot_pcd_one_view
 import pdb
 
 def make_dir(dir_path):
+    """
+    The function `make_dir` creates a directory at the specified path if it does not already exist.
+    
+    :param dir_path: The `dir_path` parameter is a string that represents the path of the directory that
+    needs to be created
+    """
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
 
 def log(fd,  message, time=True):
+    """
+    Write a log message to a file descriptor and print it to the console.
+
+    Parameters:
+    - fd: The file descriptor to write the log message to.
+    - message: The log message to write.
+    - time: Whether to include the current timestamp in the log message. Default is True.
+    """
     if time:
         message = ' ==> '.join([datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message])
     fd.write(message + '\n')
@@ -32,6 +53,16 @@ def log(fd,  message, time=True):
 
 
 def prepare_logger(params):
+    """
+    Prepare the logger for the experiment.
+
+    Args:
+        params (object): The parameters for the experiment.
+
+    Returns:
+        tuple: A tuple containing the checkpoint directory, epochs directory, log file descriptor,
+               train writer, and validation writer.
+    """
     # prepare logger directory
     make_dir(params.log_dir)
     make_dir(os.path.join(params.log_dir, params.exp_name))
@@ -58,6 +89,14 @@ def prepare_logger(params):
 
 
 def train(params, device, writer):
+    """
+    Train the VQ-VAE model.
+
+    Args:
+        params (object): Parameters for training.
+        device (torch.device): Device to perform training on.
+        writer (list): List of writer objects for logging.
+    """
     torch.backends.cudnn.benchmark = True
 
     ckpt_dir, epochs_dir, log_fd, train_writer, val_writer = writer[0], writer[1], writer[2], writer[3], writer[4]
@@ -210,13 +249,14 @@ if __name__ == '__main__':
     parser.add_argument('--train_set_path', type=str, default='data/THuman2.0_Release', help='Path of training set (THuman2.0_Release)')
     params = parser.parse_args()
     
+    # prepare logger
     writer = prepare_logger(params)
     
+    # distributed training
     torch.distributed.init_process_group(backend="nccl")
     local_rank = torch.distributed.get_rank()
     torch.cuda.set_device(local_rank)
     device = torch.device("cuda", local_rank)
     #device = torch.device("cuda")
     
-    #pdb.set_trace()
     train(params, device, writer)
