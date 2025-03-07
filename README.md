@@ -1,15 +1,23 @@
 # ThicknessVAE
 
-This project is for paper **ThicknessVAE: Learning a Side Prior for Clothed Human Body Reconstruction**.
+This project is for paper **ThicknessVAE: Learning a Lateral Prior for Clothed Human Body Reconstruction**.
+
+- [Paper](https://cmt3.research.microsoft.com/api/ICASSP2025/Files/50177) accepted by ICASSP 2025 (Poster).
 
 <div align="center">
-  <img src="images/ThicknessVAE_overview.png" alt="Overview of ThicknessVAE">
+  <img src="images/overview.png" alt="Overview of ThicknessVAE">
   <t>Overview of ThicknessVAE</t>
 </div>
 
 ## Abstract
 
-Sandwich-like structure has demonstrated excellent performance in reconstructing clothed humans. However, these approaches often generate unrealistic side geometries due to inadequate handling of the side region. In this paper, we address this issue by incorporating the side geometry of the clothed human as a prior. To this end, we propose ThicknessVAE, our two-stage method. Our work makes two key contributions: (1) We leverage a VQVAE architecture to learn a prototype for the side part of clothed human to extract common and accurate geometry features. (2) We use the this prototype as prior to transform the geometric features into a thickness map associated with clothed human images, enabling a refined normal integration result for sandwich-like reconstruction methods. By seamlessly integrating our model into the sandwich-like reconstruction pipeline, we are able to achieve highly realistic side views. Qualitative and quantitative experiments demonstrate that our approach outperforms SOTA methods in terms of side view realism for loose clothing and in-the-wild images.
+Sandwich-like structures have shown remarkable efficacy in clothed human reconstruction. However, these approaches often generate unrealistic side geometries due to
+inadequate handling of lateral regions. This paper addresses this limitation by incorporating the side geometry of clothed
+humans as a prior. We propose ThicknessVAE, a novel twostage method that makes two key contributions: (1) We learn a prototype from point clouds for the lateral regions of clothed
+humans to extract common and detailed geometric features. (2) We utilize this prototype as a prior to transform geometric
+features into a thickness map associated with clothed human images, enabling refined normal integration for sandwich-like
+reconstruction methods. By seamlessly integrating our model into the sandwich-like reconstruction pipeline, we achieve highly
+realistic side views. Both qualitative and quantitative experiments demonstrate that our approach is comparable to state-of-the-art methods in terms of side-view realism.
 
 ## Install
 
